@@ -5,7 +5,7 @@ Trang web được xây dựng nhằm cung cấp những thông số chính xác
 
 
 ## Demo
-Kết nối database từ schema
-Đổi directory vào backend, tải package với npm i
+Kết nối database từ schema \
+Đổi directory vào backend, tải package với npm i \
 Start server với npm start
 
