@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lịch Sử Tính Toán</title>
+    <link rel="stylesheet" href="../css/lịch sử tinh toán.css" />
+    <link rel="icon" href="../img/blueprint.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <!-- Thêm flatpickr CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+  </head>
+  <body>
+    <div class="app-container">
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <h1>Menu</h1>
+        </div>
+        <div class="chat-history">
+          <a href="../html/tính toán động cơ.html" class="history-item">
+            <i class="fas fa-calculator"></i>
+            <span>Tính toán kỹ thuật</span>
+          </a>
+          <a href="../html/lịch sử tính toán.html" class="history-item active">
+            <i class="fas fa-history"></i>
+            <span>Lịch sử tính toán</span>
+          </a>
+          <a href="../html/xem catalog.html" class="history-item">
+            <i class="fas fa-book"></i>
+            <span>Xem Catalog</span>
+          </a>
+        </div>
+        <div class="sidebar-footer">
+          <div class="user-profile">
+            <div class="avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="user-info">
+              <span class="username">Nhóm 12</span>
+              <span class="user-email">nhom12@example.com</span>
+            </div>
+          </div>
+          <div class="settings">
+            <i class="fas fa-cog"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-content">
+        <div class="calculation-history">
+          <h1>LỊCH SỬ TÍNH TOÁN</h1>
+
+          <div class="filter-section">
+            <div class="filter-row">
+              <div class="filter-group">
+                <label for="date-filter">Ngày tính toán:</label>
+                <input
+                  type="text"
+                  id="date-filter"
+                  name="date-filter"
+                  placeholder="dd/mm/yyyy"
+                />
+              </div>
+              <div class="filter-group">
+                <label for="type-filter">Loại động cơ:</label>
+                <select id="type-filter" name="type-filter">
+                  <option value="all">Tất cả</option>
+                  <option value="DK">Động cơ DK</option>
+                  <option value="K">Động cơ K</option>
+                  <option value="4A">Động cơ 4A</option>
+                </select>
+              </div>
+              <button class="filter-btn">
+                <i class="fas fa-filter"></i> Lọc
+              </button>
+            </div>
+          </div>
+
+          <div class="history-table-container">
+            <table class="history-table">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Ngày tính toán</th>
+                  <th>Thông số đầu vào</th>
+                  <th>Động cơ đã chọn</th>
+                  <th>Loại động cơ</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="history-table-body"></tbody>
+            </table>
+          </div>
+
+          <div class="pagination" id="pagination">
+            <!-- Pagination sẽ được điền động bằng JavaScript -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="history-modal" id="history-details-modal">
+      <div class="history-modal-content">
+        <span class="history-modal-close" onclick="closeHistoryModal()">×</span>
+        <h2 class="history-modal-title">CHI TIẾT LỊCH SỬ TÍNH TOÁN</h2>
+
+        <div class="history-section">
+          <h3 class="history-section-title">THÔNG SỐ ĐẦU VÀO</h3>
+          <div class="input-params-grid" id="input-params-container"></div>
+        </div>
+
+        <div class="history-section">
+          <h3 class="history-section-title">ĐỘNG CƠ ĐÃ CHỌN</h3>
+          <div class="motor-info-grid" id="motor-info-container"></div>
+        </div>
+
+        <div class="history-section">
+          <h3 class="history-section-title">BẢNG SỐ LIỆU ĐỘNG HỌC VÀ ĐỘNG LỰC HỌC TRÊN CÁC TRỤC</h3>
+          <div class="result-table-container">
+            <table class="result-table">
+              <thead>
+                <tr>
+                  <th class="parameter-col">Thông số</th>
+                  <th>Trục động cơ</th>
+                  <th>Trục 1</th>
+                  <th>Trục 2</th>
+                  <th>Trục 3</th>
+                  <th>Trục công tác</th>
+                </tr>
+              </thead>
+              <tbody id="calculation-results-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="history-section">
+          <h3 class="history-section-title">THÔNG SỐ BỘ TRUYỀN XÍCH</h3>
+          <div class="result-table-container">
+            <table class="result-table">
+              <thead>
+                <tr>
+                  <th class="parameter-col">Thông số</th>
+                  <th>Giá trị</th>
+                </tr>
+              </thead>
+              <tbody id="additional-params-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="history-section">
+          <h3 class="history-section-title">THÔNG SỐ BỘ TRUYỀN BÁNH RĂNG CẤP NHANH</h3>
+          <div class="result-table-container">
+            <table class="result-table">
+              <thead>
+                <tr>
+                  <th class="parameter-col">Thông số</th>
+                  <th>Giá trị</th>
+                </tr>
+              </thead>
+              <tbody id="gear-fast-params-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="history-section">
+          <h3 class="history-section-title">THÔNG SỐ BỘ TRUYỀN BÁNH RĂNG CẤP CHẬM</h3>
+          <div class="result-table-container">
+            <table class="result-table">
+              <thead>
+                <tr>
+                  <th class="parameter-col">Thông số</th>
+                  <th>Giá trị</th>
+                </tr>
+              </thead>
+              <tbody id="gear-slow-params-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="history-action-buttons">
+          <button class="history-close-btn" onclick="closeHistoryModal()">
+            <i class="fas fa-times"></i> Đóng
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thêm flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+      // Khai báo currentPage ở phạm vi toàn cục
+      let currentPage = 1;
+      const limit = 10; // Số bản ghi mỗi trang
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // Khởi tạo flatpickr cho date-filter
+        flatpickr("#date-filter", {
+          dateFormat: "d/m/Y", // Định dạng hiển thị: dd/mm/yyyy
+          allowInput: true, // Cho phép nhập tay
+          locale: {
+            firstDayOfWeek: 1, // Tuần bắt đầu từ thứ Hai
+          },
+          onChange: (selectedDates, dateStr) => {
+            currentPage = 1;
+            fetchHistory(currentPage, limit);
+          },
+        });
+
+        // Lấy lịch sử khi tải trang
+        fetchHistory(currentPage, limit);
+
+        // Xử lý lọc
+        document.querySelector(".filter-btn").addEventListener("click", () => {
+          currentPage = 1; // Reset về trang 1 khi lọc
+          fetchHistory(currentPage, limit);
+        });
+
+        // Xử lý thay đổi type-filter
+        document
+          .getElementById("type-filter")
+          .addEventListener("change", () => {
+            currentPage = 1;
+            fetchHistory(currentPage, limit);
+          });
+      });
+
+      async function fetchHistory(page, limit) {
+        try {
+          // Cập nhật currentPage
+          currentPage = page;
+
+          // Lấy giá trị date-filter và chuyển sang yyyy-mm-dd
+          const dateInput = document.getElementById("date-filter").value;
+          let dateFilter = "";
+          if (dateInput) {
+            const [day, month, year] = dateInput.split("/");
+            dateFilter = `${year}-${month.padStart(2, "0")}-${day.padStart(
+              2,
+              "0"
+            )}`;
+          }
+          const typeFilter = document.getElementById("type-filter").value;
+
+          const query = new URLSearchParams();
+          if (dateFilter) query.append("date", dateFilter);
+          if (typeFilter && typeFilter !== "all")
+            query.append("type", typeFilter);
+          query.append("page", page);
+          query.append("limit", limit);
+
+          // Thêm loading state
+          const tbody = document.getElementById("history-table-body");
+          tbody.innerHTML =
+            '<tr><td colspan="6"><i class="fas fa-spinner fa-spin"></i> Đang tải...</td></tr>';
+
+          const response = await fetch(
+            `http://localhost:3000/calculation-history?${query.toString()}`
+          );
+
+          if (!response.ok) throw new Error("Lỗi lấy lịch sử tính toán");
+
+          const result = await response.json();
+          if (!result.success) throw new Error(result.error || "Lỗi server");
+
+          displayHistory(result.data);
+          updatePagination(page, limit, result.total || result.data.length);
+        } catch (error) {
+          console.error("Lỗi:", error);
+          alert("Lỗi khi lấy lịch sử: " + error.message);
+          document.getElementById("history-table-body").innerHTML =
+            '<tr><td colspan="6">Không thể tải dữ liệu. Vui lòng thử lại.</td></tr>';
+        }
+      }
+
+      function displayHistory(data) {
+        const tbody = document.getElementById("history-table-body");
+        tbody.innerHTML = "";
+
+        if (data.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="6">Không có bản ghi nào phù hợp.</td></tr>';
+          return;
+        }
+
+        data.forEach((item) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${item.id}</td>
+            <td>${new Date(item.calculation_date).toLocaleString("vi-VN", {
+              dateStyle: "short",
+              timeStyle: "short",
+            })}</td>
+            <td>
+              <button class="view-details-btn" data-id="${item.id}">
+                <i class="fas fa-eye"></i> Xem chi tiết
+              </button>
+            </td>
+            <td>
+              <a href="ket-qua-tinh-toan.html?id=${item.id}">${
+            item.motorInfo.code || "N/A"
+          }</a>
+            </td>
+            <td>
+              <span class="motor-type ${
+                item.motor_type?.toLowerCase() || ""
+              }">${item.motor_type || "N/A"}</span>
+            </td>
+            <td>
+              <button class="action-btn delete-btn" data-id="${
+                item.id
+              }" title="Xóa">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        // Gắn sự kiện cho các nút "Xem chi tiết"
+        document.querySelectorAll(".view-details-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = btn.getAttribute("data-id");
+            showHistoryDetails(id);
+          });
+        });
+
+        // Gắn sự kiện cho các nút "Xóa"
+        document.querySelectorAll(".delete-btn").forEach((btn) => {
+          btn.addEventListener("click", async () => {
+            const id = btn.getAttribute("data-id");
+            if (confirm("Bạn có chắc muốn xóa bản ghi này?")) {
+              try {
+                const response = await fetch(
+                  `http://localhost:3000/calculation-history/${id}`,
+                  {
+                    method: "DELETE",
+                  }
+                );
+
+                if (!response.ok) throw new Error("Lỗi xóa bản ghi");
+
+                const result = await response.json();
+                if (result.success) {
+                  alert("Đã xóa bản ghi thành công");
+                  // Làm mới danh sách với trang hiện tại
+                  fetchHistory(currentPage, limit);
+                } else {
+                  throw new Error(result.error || "Lỗi xóa bản ghi");
+                }
+              } catch (error) {
+                console.error("Lỗi:", error);
+                alert("Lỗi khi xóa: " + error.message);
+              }
+            }
+          });
+        });
+      }
+
+      async function showHistoryDetails(id) {
+        try {
+          const response = await fetch(
+            `http://localhost:3000/calculation-history/${id}`
+          );
+
+          if (!response.ok) throw new Error("Lỗi lấy chi tiết lịch sử");
+
+          const result = await response.json();
+          if (!result.success) throw new Error(result.error || "Lỗi server");
+
+          const data = result.data;
+
+          // Điền thông số đầu vào
+          const inputParamsContainer = document.getElementById(
+            "input-params-container"
+          );
+          inputParamsContainer.innerHTML = "";
+          for (const [key, value] of Object.entries(data.inputParams || {})) {
+            const label = getParamLabel(key);
+            inputParamsContainer.innerHTML += `
+              <div class="param-item">
+                <span class="param-label">${label}:</span>
+                <span class="param-value">${value || "N/A"}</span>
+              </div>
+            `;
+          }
+
+          // Điền thông tin động cơ
+          const motorInfoContainer = document.getElementById(
+            "motor-info-container"
+          );
+          motorInfoContainer.innerHTML = `
+            <div class="motor-info-item">
+              <span class="motor-info-label">Mã hiệu:</span>
+              <span class="motor-info-value">${
+                data.motorInfo?.code || "N/A"
+              }</span>
+            </div>
+            <div class="motor-info-item">
+              <span class="motor-info-label">Công suất:</span>
+              <span class="motor-info-value">${
+                data.motorInfo?.power || "N/A"
+              } kW</span>
+            </div>
+            <div class="motor-info-item">
+              <span class="motor-info-label">Tốc độ:</span>
+              <span class="motor-info-value">${
+                data.motorInfo?.rpm || "N/A"
+              } vòng/phút</span>
+            </div>
+            <div class="motor-info-item">
+              <span class="motor-info-label">Khối lượng:</span>
+              <span class="motor-info-value">${
+                data.motorInfo?.weight || "N/A"
+              } kg</span>
+            </div>
+          `;
+
+          // Điền kết quả tính toán
+          const resultsBody = document.getElementById(
+            "calculation-results-body"
+          );
+          resultsBody.innerHTML = `
+            <tr>
+              <td class="parameter-col">P (kW)</td>
+              <td>${data.calculationResults?.P_dc1 || "N/A"}</td>
+              <td>${data.calculationResults?.P_1 || "N/A"}</td>
+              <td>${data.calculationResults?.P_2 || "N/A"}</td>
+              <td>${data.calculationResults?.P_3 || "N/A"}</td>
+              <td>${data.calculationResults?.P_ct || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">u</td>
+              <td>1</td>
+              <td>${data.calculationResults?.u_1 || "N/A"}</td>
+              <td>${data.calculationResults?.u_2 || "N/A"}</td>
+              <td>${data.calculationResults?.u_xm || "N/A"}</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">n (vòng/phút)</td>
+              <td>${data.calculationResults?.n_dc || "N/A"}</td>
+              <td>${data.calculationResults?.n_1 || "N/A"}</td>
+              <td>${data.calculationResults?.n_2 || "N/A"}</td>
+              <td>${data.calculationResults?.n_3 || "N/A"}</td>
+              <td>${data.calculationResults?.n_ct || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">T (N.mm)</td>
+              <td>${data.calculationResults?.T_dc || "N/A"}</td>
+              <td>${data.calculationResults?.T1 || "N/A"}</td>
+              <td>${data.calculationResults?.T2 || "N/A"}</td>
+              <td>${data.calculationResults?.T3 || "N/A"}</td>
+              <td>${data.calculationResults?.T_ct || "N/A"}</td>
+            </tr>
+          `;
+
+          // Điền thông số bộ truyền xích
+          const additionalParamsBody = document.getElementById(
+            "additional-params-body"
+          );
+          additionalParamsBody.innerHTML = `
+            <tr>
+              <td class="parameter-col">Số răng z₁</td>
+              <td>${data.calculationResults?.z_1 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Số răng z₂</td>
+              <td>${data.calculationResults?.z_2 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Bước xích p (mm)</td>
+              <td>${data.calculationResults?.p || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Chiều rộng dây xích B (mm)</td>
+              <td>${data.calculationResults?.B || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Đường kính chốt d_c (mm)</td>
+              <td>${data.calculationResults?.d_c || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Hệ số xích x_c</td>
+              <td>${data.calculationResults?.x_c || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Đường kính bánh xích nhỏ d₁ (mm)</td>
+              <td>${data.calculationResults?.d_1 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Đường kính bánh xích lớn d₂ (mm)</td>
+              <td>${data.calculationResults?.d_2 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Lực hướng kính F_rx (N)</td>
+              <td>${data.calculationResults?.F_rx || "N/A"}</td>
+            </tr>
+          `;
+
+          // Điền thông số bộ truyền bánh răng cấp nhanh
+          const gearFastParamsBody = document.getElementById(
+            "gear-fast-params-body"
+          );
+          gearFastParamsBody.innerHTML = `
+            <tr>
+              <td class="parameter-col">Khoảng cách trục aw₁ (mm)</td>
+              <td>${data.calculationResults?.aw1 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Mô-đun m₁ (mm)</td>
+              <td>${data.calculationResults?.m1 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Chiều rộng bánh răng bw₁ (mm)</td>
+              <td>${data.calculationResults?.bw1 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Hệ số chiều rộng bánh răng B₁</td>
+              <td>${data.calculationResults?.B1 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Số răng z₁</td>
+              <td>${data.calculationResults?.z1 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Số răng z₂</td>
+              <td>${data.calculationResults?.z2 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Hệ số dịch chỉnh x₁</td>
+              <td>${data.calculationResults?.x1 || "0"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Hệ số dịch chỉnh x₂</td>
+              <td>${data.calculationResults?.x2 || "0"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Đường kính vòng chia d₁ (mm)</td>
+              <td>${data.calculationResults?.d1 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Đường kính vòng chia d₂ (mm)</td>
+              <td>${data.calculationResults?.d2 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Đường kính vòng đỉnh da₁ (mm)</td>
+              <td>${data.calculationResults?.da1 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Đường kính vòng đỉnh da₂ (mm)</td>
+              <td>${data.calculationResults?.da2 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Đường kính vòng chân df₁ (mm)</td>
+              <td>${data.calculationResults?.df1 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Đường kính vòng chân df₂ (mm)</td>
+              <td>${data.calculationResults?.df2 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Đường kính ngoài dw₁ (mm)</td>
+              <td>${data.calculationResults?.dw1 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Đường kính ngoài dw₂ (mm)</td>
+              <td>${data.calculationResults?.dw2 || "N/A"}</td>
+            </tr>
+          `;
+
+          // Điền thông số bộ truyền bánh răng cấp chậm
+          const gearSlowParamsBody = document.getElementById(
+            "gear-slow-params-body"
+          );
+          gearSlowParamsBody.innerHTML = `
+            <tr>
+              <td class="parameter-col">Khoảng cách trục aw₂ (mm)</td>
+              <td>${data.calculationResults?.aw2 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Mô-đun m₂ (mm)</td>
+              <td>${data.calculationResults?.m2 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Chiều rộng bánh răng bw₂ (mm)</td>
+              <td>${data.calculationResults?.bw2 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Tỷ số truyền u_m₂</td>
+              <td>${data.calculationResults?.um2 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Hệ số chiều rộng bánh răng B₂</td>
+              <td>${data.calculationResults?.B2 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Số răng z₃</td>
+              <td>${data.calculationResults?.z3 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Số răng z₄</td>
+              <td>${data.calculationResults?.z4 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Hệ số dịch chỉnh x₁</td>
+              <td>${data.calculationResults?.x1 || "0"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Hệ số dịch chỉnh x₂</td>
+              <td>${data.calculationResults?.x2 || "0"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Đường kính vòng chia d₃ (mm)</td>
+              <td>${data.calculationResults?.d3 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Đường kính vòng chia d₄ (mm)</td>
+              <td>${data.calculationResults?.d4 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Đường kính vòng đỉnh da₃ (mm)</td>
+              <td>${data.calculationResults?.da3 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Đường kính vòng đỉnh da₄ (mm)</td>
+              <td>${data.calculationResults?.da4 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Đường kính vòng chân df₃ (mm)</td>
+              <td>${data.calculationResults?.df3 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Đường kính vòng chân df₄ (mm)</td>
+              <td>${data.calculationResults?.df4 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Đường kính ngoài dw₃ (mm)</td>
+              <td>${data.calculationResults?.dw3 || "N/A"}</td>
+            </tr>
+            <tr>
+              <td class="parameter-col">Đường kính ngoài dw₄ (mm)</td>
+              <td>${data.calculationResults?.dw4 || "N/A"}</td>
+            </tr>
+          `;
+
+          // Hiển thị modal
+          document.getElementById("history-details-modal").style.display =
+            "flex";
+        } catch (error) {
+          console.error("Lỗi:", error);
+          alert("Lỗi khi lấy chi tiết: " + error.message);
+        }
+      }
+
+      function closeHistoryModal() {
+        document.getElementById("history-details-modal").style.display = "none";
+      }
+
+      function getParamLabel(key) {
+        const labels = {
+          force: "Lực vòng F (N)",
+          velocity: "Vận tốc v (m/s)",
+          diameter: "Đường kính tang D (mm)",
+          rotation: "Số chiều quay",
+          T1: "Chế độ tải T1 (Nmm)",
+          t1: "Chế độ tải t1 (s)",
+          T2: "Chế độ tải T2 (Nmm)",
+          t2: "Chế độ tải t2 (s)",
+          efficiencyX: "η<sub>x</sub>",
+          efficiencyBr: "η<sub>br</sub>",
+          efficiencyOi: "η<sub>oi</sub>",
+          efficiencyKn: "η<sub>kn</sub>",
+          transmissionX: "u<sub>x</sub>",
+          transmissionH: "u<sub>h</sub>",
+          serviceLife: "Thời gian làm việc (năm)",
+          workDays: "Ngày làm việc/năm",
+          shifts: "Số ca làm việc",
+          hoursPerShift: "Giờ làm việc/ca",
+        };
+        return labels[key] || key;
+      }
+
+      function updatePagination(currentPage, limit, totalRecords) {
+        const pagination = document.getElementById("pagination");
+        const totalPages = Math.ceil(totalRecords / limit);
+        pagination.innerHTML = "";
+
+        // Nút Previous
+        const prevBtn = document.createElement("button");
+        prevBtn.className = "page-btn";
+        prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.addEventListener("click", () => {
+          if (currentPage > 1) {
+            currentPage--;
+            fetchHistory(currentPage, limit);
+          }
+        });
+        pagination.appendChild(prevBtn);
+
+        // Các nút trang
+        for (let i = 1; i <= totalPages; i++) {
+          const pageBtn = document.createElement("button");
+          pageBtn.className = `page-btn ${i === currentPage ? "active" : ""}`;
+          pageBtn.textContent = i;
+          pageBtn.addEventListener("click", () => {
+            currentPage = i;
+            fetchHistory(currentPage, limit);
+          });
+          pagination.appendChild(pageBtn);
+        }
+
+        // Nút Next
+        const nextBtn = document.createElement("button");
+        nextBtn.className = "page-btn";
+        nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.addEventListener("click", () => {
+          if (currentPage < totalPages) {
+            currentPage++;
+            fetchHistory(currentPage, limit);
+          }
+        });
+        pagination.appendChild(nextBtn);
+      }
+
+      // Đóng modal khi click bên ngoài
+      window.addEventListener("click", (event) => {
+        const modal = document.getElementById("history-details-modal");
+        if (event.target === modal) {
+          closeHistoryModal();
+        }
+      });
+    </script>
+  </body>
+</html>

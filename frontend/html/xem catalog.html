@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xem Catalog</title>
+    <link rel="stylesheet" href="../css/xem catalog.css">
+    <link rel="icon" href="../img/blueprint.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>Menu</h1>
+            </div>
+            <div class="chat-history">
+                <a href="../html/tính toán động cơ.html" class="history-item">
+                    <i class="fas fa-search"></i>
+                    <span>Tính toán kĩ thuật</span>
+                </a>
+                <a href="../html/lịch sử tính toán.html" class="history-item">
+                    <i class="fas fa-file"></i>
+                    <span>Lịch sử tính toán</span>
+                </a>
+                <a href="../html/xem catalog.html" class="history-item active">
+                    <i class="fas fa-address-book"></i>
+                    <span>Xem Catalog</span>
+                </a>
+            </div>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="username">Nhóm 12</span>
+                        <span class="user-email">nhom12@example.com</span>
+                    </div>
+                </div>
+                <div class="settings">
+                    <i class="fas fa-cog"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div class="catalog-container">
+                <h1>XEM CATALOG ĐỘNG CƠ</h1>
+
+                <div class="filter-section">
+                    <div class="filter-group">
+                        <label for="type-filter">Loại động cơ:</label>
+                        <select id="type-filter" name="type-filter">
+                            <option value="all">Tất cả</option>
+                            <option value="K">Động cơ K</option>
+                            <option value="DK">Động cơ DK</option>
+                            <option value="4A">Động cơ 4A</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="search">Tìm kiếm mã hiệu:</label>
+                        <input type="text" id="search" name="search" placeholder="Nhập mã hiệu...">
+                    </div>
+                    <button class="filter-btn" id="filter-btn">
+                        <i class="fas fa-filter"></i> Lọc
+                    </button>
+                </div>
+
+                <div class="catalog-table-container">
+                    <table class="catalog-table">
+                        <thead>
+                            <tr>
+                                <th>Mã hiệu</th>
+                                <th>Công suất (kW)</th>
+                                <th>Vận tốc (vòng/phút)</th>
+                                <th>n (%)</th>
+                                <th>Hệ số công suất</th>
+                                <th>Tỷ số truyền</th>
+                                <th>Loại động cơ</th>
+                                <th>Khối lượng (kg)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="catalog-table-body"></tbody>
+                    </table>
+                </div>
+
+                <div class="pagination" id="pagination"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        const limit = 10;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchCatalog(currentPage, limit);
+            document.getElementById("filter-btn").addEventListener("click", () => {
+                currentPage = 1;
+                fetchCatalog(currentPage, limit);
+            });
+
+            document.getElementById("type-filter").addEventListener("change", () => {
+                currentPage = 1;
+                fetchCatalog(currentPage, limit);
+            });
+
+            document.getElementById("search").addEventListener("input", debounce(() => {
+                currentPage = 1;
+                fetchCatalog(currentPage, limit);
+            }, 300));
+        });
+
+        function debounce(func, wait) {
+            let timeout;
+            return function (...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
+        async function fetchCatalog(page, limit) {
+            try {
+                currentPage = page;
+                const typeFilter = document.getElementById("type-filter").value;
+                const search = document.getElementById("search").value.trim();
+
+                const tbody = document.getElementById("catalog-table-body");
+                tbody.innerHTML = '<tr><td colspan="8"><i class="fas fa-spinner fa-spin"></i> Đang tải...</td></tr>';
+
+                const url = new URL(`http://localhost:3000/catalog`);
+                const params = { page, limit };
+                if (typeFilter && typeFilter !== "all") params.type = typeFilter;
+                if (search) params.search = search;
+                url.search = new URLSearchParams(params).toString();
+
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("Lỗi lấy dữ liệu catalog");
+
+                const result = await response.json();
+                if (!result.success) throw new Error(result.error || "Lỗi server");
+
+                displayCatalog(result.data);
+                updatePagination(page, limit, result.total);
+            } catch (error) {
+                console.error("Lỗi:", error);
+                document.getElementById("catalog-table-body").innerHTML =
+                    '<tr><td colspan="8">Không thể tải dữ liệu. Vui lòng thử lại.</td></tr>';
+            }
+        }
+
+        function displayCatalog(data) {
+            const tbody = document.getElementById("catalog-table-body");
+            tbody.innerHTML = "";
+
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8">Không có động cơ nào phù hợp.</td></tr>';
+                return;
+            }
+
+            data.forEach((item) => {
+                const motorTypeClass = item.Loai_dong_co === "4A" ? "a4" : item.Loai_dong_co.toLowerCase();
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${item.Ki_hieu}</td>
+                    <td>${item.Cong_suat}</td>
+                    <td>${item.Van_toc}</td>
+                    <td>${item.n}</td>
+                    <td>${item.Cosphi}</td>
+                    <td>${item.TK_TD}</td>
+                    <td><span class="motor-type ${motorTypeClass}">${item.Loai_dong_co}</span></td>
+                    <td>${item.Khoi_Luong}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function updatePagination(currentPage, limit, totalRecords) {
+            const pagination = document.getElementById("pagination");
+            const totalPages = Math.ceil(totalRecords / limit);
+            pagination.innerHTML = "";
+
+            const prevBtn = document.createElement("button");
+            prevBtn.className = "page-btn";
+            prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.addEventListener("click", () => {
+                if (currentPage > 1) fetchCatalog(currentPage - 1, limit);
+            });
+            pagination.appendChild(prevBtn);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageBtn = document.createElement("button");
+                pageBtn.className = `page-btn ${i === currentPage ? "active" : ""}`;
+                pageBtn.textContent = i;
+                pageBtn.addEventListener("click", () => fetchCatalog(i, limit));
+                pagination.appendChild(pageBtn);
+            }
+
+            const nextBtn = document.createElement("button");
+            nextBtn.className = "page-btn";
+            nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.addEventListener("click", () => {
+                if (currentPage < totalPages) fetchCatalog(currentPage + 1, limit);
+            });
+            pagination.appendChild(nextBtn);
+        }
+    </script>
+</body>
+</html>

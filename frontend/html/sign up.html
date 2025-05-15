@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng ký</title>
+    <link rel="stylesheet" href="../css/sign up.css" />
+    <link rel="icon" href="../img/blueprint.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script type="text/javascript" src="../javascript/auth.js" defer></script>
+  </head>
+  <body class="auth-page">
+    <div class="auth-container">
+      <div class="auth-gif" data-tilt>
+        <img src="../img/signup.jpg" alt="img" class="auth-img" />
+      </div>
+      <div class="auth-box">
+        <h2 id="auth-title">Đăng ký</h2>
+        <p id="error-message"></p>
+        <form id="auth-form">
+          <div>
+            <label for="email">Email:</label>
+            <input
+              type="email"
+              id="email-input"
+              name="email"
+              placeholder="Email"
+              class="envelope"
+L
+              required
+            />
+          </div>
+          <div>
+            <label for="password">Mật khẩu:</label>
+            <input
+              type="password"
+              id="password-input"
+              name="password"
+              placeholder="Mật khẩu"
+              class="lock"
+              required
+            />
+          </div>
+          <div>
+            <label for="confirm-password">Xác nhận mật khẩu:</label>
+            <input
+              type="password"
+              id="confirm-password-input"
+              name="confirm-password"
+              placeholder="Xác nhận mật khẩu"
+              class="lock"
+              required
+            />
+          </div>
+          <button type="submit" class="auth-btn">Đăng ký</button>
+        </form>
+        <p id="toggle-text">
+          Đã có tài khoản?
+          <a href="../html/sign in.html" id="toggle-auth">Đăng nhập</a>
+        </p>
+      </div>
+    </div>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"
+    ></script>
+  </body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính Toán Kĩ Thuật</title>
+    <link rel="stylesheet" href="../css/tính toán động cơ.css">
+    <link rel="icon" href="../img/blueprint.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>Menu</h1>
+            </div>
+            
+            <div class="chat-history">
+          <a href="../html/tính toán động cơ.html" class="history-item">
+            <i class="fas fa-search"></i>
+            <span>Tính toán kĩ thuật</span>
+          </a>
+          <a href="../html/lịch sử tính toán.html" class="history-item active">
+            <i class="fas fa-file"></i>
+            <span>Lịch sử tính toán</span>
+          </a>
+          <a href="../html/xem catalog.html" class="history-item">
+            <i class="fas fa-address-book"></i>
+            <span>Xem Catalog</span>
+          </a>
+        </div>
+            
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="username">Nhóm 12</span>
+                        <span class="user-email">nhom12@example.com</span>
+                    </div>
+                </div>
+                <div class="settings">
+                    <i class="fas fa-cog"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div class="technical-calculation" id="technical-calculation">
+                <h1>TÍNH TOÁN KỸ THUẬT</h1>
+                <form id="calculation-form">
+                    <div class="form-container">
+                        <!-- Left Column - Design Parameters -->
+                        <div class="design-params">
+                            <div class="design-params-box">
+                                <h2>Số liệu thiết kế</h2>
+                                
+                                <div class="form-row">
+                                    <div class="compact-form-group">
+                                        <label for="force">Lực vòng F(N):</label>
+                                        <input type="number" id="force" name="force" step="any" required>
+                                        <span class="error-message" id="error-{input-id}"></span>
+                                    </div>
+                                    
+                                    <div class="compact-form-group">
+                                        <label for="velocity">Vận tốc v(m/s):</label>
+                                        <input type="number" id="velocity" name="velocity" step="any" required>
+                                        <span class="error-message" id="error-{input-id}"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="compact-form-group">
+                                        <label for="diameter">Đường kính tang D(mm):</label>
+                                        <input type="number" id="diameter" name="diameter" step="any" required>
+                                        <span class="error-message" id="error-{input-id}"></span>
+                                    </div>
+                                    <div class="compact-form-group">
+                                        <label for="rotation">Số chiều quay:</label>
+                                        <input type="number" id="rotation" name="rotation" step="any" required>
+                                        <span class="error-message" id="error-{input-id}"></span>
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="compact-form-group">
+                                        <label for="load1">Chế độ tải T1(Nmm):</label>
+                                        <input type="number" id="load1" name="load1" step="any" required>
+                                        <span class="error-message" id="error-{input-id}"></span>
+                                    </div>
+                                    
+                                    <div class="compact-form-group">
+                                        <label for="time1">Chế độ tải t1(s):</label>
+                                        <input type="number" id="time1" name="time1" step="any" required>
+                                        <span class="error-message" id="error-{input-id}"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="compact-form-group">
+                                        <label for="load2">Chế độ tải T2(Nmm):</label>
+                                        <input type="number" id="load2" name="load2" step="any" required>
+                                        <span class="error-message" id="error-{input-id}"></span>
+                                    </div>
+                                    
+                                    <div class="compact-form-group">
+                                        <label for="time2">Chế độ tải t2(s):</label>
+                                        <input type="number" id="time2" name="time2" step="any" required>
+                                        <span class="error-message" id="error-{input-id}"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    
+                                    <div class="compact-form-group">
+                                        <label for="service-life">Thời gian làm việc L(năm):</label>
+                                        <input type="number" id="service-life" name="service-life" step="any" required>
+                                        <span class="error-message" id="error-{input-id}"></span>
+                                    </div>
+
+                                    <div class="compact-form-group">
+                                        <label for="work-days">Ngày làm việc/năm:</label>
+                                        <input type="number" id="work-days" name="work-days" step="any" required>
+                                        <span class="error-message" id="error-{input-id}"></span>
+                                    </div>
+                                    
+                                    
+                                </div>
+                                
+                                <div class="form-row">
+
+                                    <div class="compact-form-group">
+                                        <label for="shifts">Số ca làm việc:</label>
+                                        <input type="number" id="shifts" name="shifts" step="any"required>
+                                        <span class="error-message" id="error-{input-id}"></span>
+                                    </div>
+                                    <div class="compact-form-group">
+                                        <label for="hours-per-shift">Giờ làm việc/ca:</label>
+                                        <input type="number" id="hours-per-shift" name="hours-per-shift" step="any"required>
+                                        <span class="error-message" id="error-{input-id}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="efficiency-section">
+                            <div class="efficiency-box">
+                                <h2>Hiệu suất</h2>
+                                <div class="efficiency-item">
+                                    <label for="efficiency-x">η<sub>x</sub>:</label>
+                                    <input type="number" id="efficiency-x" name="efficiency-x" step="any" min="0.95" max="0.97"  oninput="validateInput(this)" required> 
+                                    <span class="error-message" id="error-efficiency-x"></span>
+                                </div>
+                                
+                                <div class="efficiency-item">
+                                    <label for="efficiency-br">η<sub>br</sub>:</label>
+                                    <input type="number" id="efficiency-br" name="efficiency-br" step="any" min="0.96" max="0.98" oninput="validateInput(this)" required>
+                                    <span class="error-message" id="error-efficiency-x"></span>
+                                </div>
+                                
+                                <div class="efficiency-item">
+                                    <label for="efficiency-oi">η<sub>oi</sub>:</label>
+                                    <input type="number" id="efficiency-oi" name="efficiency-oi" step="any" min="0.99" max="0.995"  oninput="validateInput(this)" required>
+                                    <span class="error-message" id="error-efficiency-x"></span>
+                                </div>
+                                
+                                <div class="efficiency-item">
+                                    <label for="efficiency-kn">η<sub>kn</sub>:</label>
+                                    <input type="number" id="efficiency-kn" name="efficiency-kn" value="1" disabled>
+                                </div>
+                            </div>
+                            
+                            <div class="transmission-box">
+                                <h2>Tỷ số truyền</h2>
+                                <div class="transmission-item">
+                                    <label for="transmission-x">u<sub>x</sub>:</label>
+                                    <input type="number" id="transmission-x" name="transmission-x" step="any" min="2" max="5" oninput="validateInput(this)" required>
+                                    <span class="error-message" id="error-efficiency-x"></span>
+                                </div>
+                                
+                                <div class="transmission-item">
+                                    <label for="transmission-h">u<sub>h</sub>:</label>
+                                    <input type="number" id="transmission-h" name="transmission-h" step="any" min="8" max="40" oninput="validateInput(this)" required>
+                                    <span class="error-message" id="error-efficiency-x"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">SUBMIT</button>
+                </form>
+            </div>
+            
+           
+    <script src="../javascript/script.js"></script>
+</body>
+</html>
